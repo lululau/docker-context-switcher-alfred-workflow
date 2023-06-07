@@ -29,13 +29,13 @@ end
 
 def list(query=nil)
   contextes = DockerContext.all
-    .select { |ctx| query.nil? || ctx.name.include?(query) }
+    .select { |ctx| query.nil? || ctx.name.include?(query) || ctx.endpoint.include?(query) }
     .sort_by(&:sort_key)
   item_list = ItemList.new
   item_list.items = contextes.map { |ctx|
     item = Item.new
     item.title = ctx.name
-    item.subtitle = "ctx.endpoint"
+    item.subtitle = ctx.endpoint
     item.icon[:text] = ICON[ctx.current]
     item.attributes = {
       arg: ctx.name
